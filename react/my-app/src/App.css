@@ -1,0 +1,83 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main.flex-grow-1 {
+  flex-grow: 1;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+.App-main {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.box {
+  height: 60vh;
+  width:300px ;
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+  background-color: #cab6b6;
+  border-radius: 3%;
+ 
+}
+.cont{
+  height: 80vh;
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bt{
+  width:250px;
+  padding: 5px;
+  margin:10px;
+  border-radius: 5px;
+}
+
+.App-header{
+  background-color: #083692;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: serif;
+  font-size: 40px;
+  color: white;
+}
+.sub{
+  margin-top:100px;
+  background-color: rgb(161, 56, 56);
+}
+.sub:hover{
+  background-color: rgb(133, 50, 50);
+}
+.App-link {
+  color: #61dafb;
+}
+
+/* @keyframes App-logo-bounce {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-20px); }
+} */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
