@@ -8,7 +8,7 @@ function Overview() {
         </p>
       </header>
 
-      <section className="">
+      <section className="mb-5">
         <h2 style={{color:'red'}}>How It Works</h2>
         <p>
           1. Upload a clear skin image.<br />

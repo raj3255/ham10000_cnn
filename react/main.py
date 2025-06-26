@@ -1,14 +1,16 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 import mysql.connector
 from fastapi.middleware.cors import CORSMiddleware
+import tensorflow as tf
+import numpy as np
+
 
 app = FastAPI()
 
-# Allow all origins for development (you can restrict it in production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Or use ["http://localhost:3000"] for stricter control
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,7 +35,7 @@ class LoginModel(BaseModel):
     email:str
     password:str
 # Create users table if not exists
-def create_users_table():
+def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -44,12 +46,22 @@ def create_users_table():
             password VARCHAR(255)
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS predictions (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            user_id INT, 
+            class_idx INT, 
+            confidence FLOAT, 
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
     conn.commit()
     cursor.close()
     conn.close()
 
-create_users_table()
+create_tables()
 
+model=tf.keras.models.load_model("ham1000_cnn_model_128improved.keras")
 # Register route
 @app.post("/api/register")
 def register(user: User):
@@ -86,3 +98,32 @@ def login(login: LoginModel):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     return {"message": "Login successful", "username": result["username"]}
+
+@app.post("/api/upload")
+async def upload_image(user_id: int = Form(...), file: UploadFile = File(...)):
+    contents = await file.read()
+    IMG_HEIGHT = 128
+    IMG_WIDTH = 128
+    img = tf.image.decode_image(contents, channels=3)
+    img = tf.image.resize(img, [IMG_HEIGHT, IMG_WIDTH])
+    img = img[None, ...] / 255.0  # Normalize
+
+    preds = model.predict(img)
+    class_idx = int(np.argmax(preds, axis=1)[0])
+    confidence = float(np.max(preds))
+    # You can map idx → class name here
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO predictions (user_id, class_idx, confidence)
+        VALUES ( %s, %s, %s)
+    """, (user_id, class_idx, confidence))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return {
+        "class_idx": class_idx, 
+        "confidence": confidence,
+        "filename":file.filename
+        }
