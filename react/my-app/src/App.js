@@ -13,6 +13,7 @@ import Contact from './Contact';
 import About from './About';
 import Terms from './Terms';
 import Privacy from './Privacy';
+import Overview from './Overview';
 
 import MainLayout from './layouts/MainLayout';
 import MinimalLayout from './layouts/MinimalLayout';
@@ -32,6 +33,7 @@ function App() {
           <Route path="/about" element={<MainLayout><About /></MainLayout>} />
           <Route path="/terms" element={<MainLayout><Terms /></MainLayout>} />
           <Route path="/privacy" element={<MainLayout><Privacy /></MainLayout>} />
+          <Route path='/overview' element={<MainLayout><Overview /></MainLayout>}/>
         </Routes>
       </div>
     </Router>
