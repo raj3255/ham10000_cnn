@@ -8,7 +8,7 @@ app = FastAPI()
 # Allow all origins for development (you can restrict it in production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or use ["http://localhost:3000"] for stricter control
+    allow_origins=["http://localhost:3000"],  # Or use ["http://localhost:3000"] for stricter control
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,7 +28,10 @@ class User(BaseModel):
     username: str
     email: str
     password: str  # In production, use hashing
-
+#creating login model
+class LoginModel(BaseModel):
+    email:str
+    password:str
 # Create users table if not exists
 def create_users_table():
     conn = get_connection()
@@ -69,12 +72,12 @@ def register(user: User):
 
 # Login route
 @app.post("/api/login")
-def login(user: User):
+def login(login: LoginModel):
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s",
-                   (user.email, user.password))
+                   (login.email, login.password))
     result = cursor.fetchone()
     cursor.close()
     conn.close()
