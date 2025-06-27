@@ -22,7 +22,7 @@ Upload an image, and it predicts the lesion type.
 
 ## Model & Dataset (HAM10000)
 
-Since the dataset isn't publicly included, here’s an overview:
+Since the dataset isn't publicly included, here’s an overview( becouse of large size):
 
 - **HAM10000 (“Human Against Machine with 10K images”)**  
   - ~10,015 dermatoscopic images across **7 diagnostic categories** :contentReference[oaicite:1]{index=1}.  
@@ -30,7 +30,8 @@ Since the dataset isn't publicly included, here’s an overview:
   - Categories: `akiec`, `bcc`, `bkl`, `df`, `mel`, `nv`, `vasc`.
 
 - **Model Training**  
-  - Trained a CNN on resized lesion images, achieving XX% validation accuracy.  
+  - Trained a CNN on resized lesion images, achieving 75% validation accuracy with pretrained model (mibilenet) and with custom build model it is 70% as the data size is small and highly imbalanced its hard to achieve higher accuracy.  
   - Final model saved as `.keras` for backend inference.
+  and other model can be saved using .ipynb notebook.
 
 ---

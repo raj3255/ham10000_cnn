@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import numpy as np
 import pickle
-
+from dotenv import load_dotenv
+import os
 
 with open('label_encoder.pkl','rb') as f:
     le = pickle.load(f)
@@ -19,12 +20,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+load_dotenv()
 def get_connection():
     return mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="Sunny2005@",
-        database="skincare_ai"
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS"),
+        database=os.getenv("DB_NAME")
     )
 
 class User(BaseModel):
