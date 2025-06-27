@@ -14,14 +14,13 @@ function ImageUpload() {
         if (!file) return alert("Choose a file first");
 
         const formData = new FormData();
-        formData.append("file", file); // ✓ matches the FastAPI `file` parameter
+        formData.append("file", file);
         formData.append("user_id", "1");
         try {
             const res = await axios.post(
                 "http://localhost:8000/api/upload",
                 formData,
                 {
-                    // ✅ Do NOT set Content-Type manually!
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -54,8 +53,8 @@ function ImageUpload() {
             {result && (
                 <div>
                     <h3>Prediction Result:</h3>
-                    <p>🌟 Class: {result.class_idx}</p>
-                    <p>✅ Confidence: {(result.confidence * 100).toFixed(2)}%</p>
+                    <p>Class: {result.class_name}</p>
+                    <p> Confidence: {(result.confidence * 100).toFixed(2)}%</p>
                 </div>
             )}
         </div>

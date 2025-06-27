@@ -2,7 +2,7 @@ function Overview() {
   return (
     <div className="container py-5">
       <header className="mb-5 text-center">
-        <h1 style={{color:'red'}}>Welcome to SkinCare AI</h1>
+        <h1 style={{color:'red'}}>Welcome to SkinCancer AI</h1>
         <p className="lead" >
           Our AI-powered tool helps you understand skin conditions quickly and accurately.
         </p>

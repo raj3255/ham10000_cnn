@@ -4,8 +4,11 @@ import mysql.connector
 from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import numpy as np
+import pickle
 
 
+with open('label_encoder.pkl','rb') as f:
+    le = pickle.load(f)
 app = FastAPI()
 
 app.add_middleware(
@@ -21,7 +24,7 @@ def get_connection():
         host="localhost",
         user="root",
         password="Sunny2005@",
-        database="skincare_ai"
+        database="SkinCancer_ai"
     )
 
 class User(BaseModel):
@@ -106,7 +109,12 @@ async def upload_image(user_id: int = Form(...), file: UploadFile = File(...)):
     preds = model.predict(img)
     class_idx = int(np.argmax(preds, axis=1)[0])
     confidence = float(np.max(preds))
-    # map idx → class name need to add
+     
+    try:
+        class_name = le.inverse_transform([class_idx])[0]
+    except Exception:
+        raise HTTPException(status_code=500, detail="Unknown predicted index")
+    
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -119,6 +127,7 @@ async def upload_image(user_id: int = Form(...), file: UploadFile = File(...)):
 
     return {
         "class_idx": class_idx, 
+        "class_name":class_name,
         "confidence": confidence,
         "filename":file.filename
         }
