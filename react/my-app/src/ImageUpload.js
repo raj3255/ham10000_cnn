@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { labelInfo } from "./LabelInfo";
 function ImageUpload() {
     const [file, setFile] = useState(null);
     const [result, setResult] = useState(null);
@@ -53,8 +53,10 @@ function ImageUpload() {
             {result && (
                 <div>
                     <h3>Prediction Result:</h3>
-                    <p>Class: {result.class_name}</p>
-                    <p> Confidence: {(result.confidence * 100).toFixed(2)}%</p>
+                    <h3 style={{color:"red"}}>{labelInfo[result.class_name]?.name}</h3>
+                    <p><strong>Description:</strong> {labelInfo[result.class_name]?.description}</p>
+                    <p><strong>Advice:</strong> {labelInfo[result.class_name]?.advice}</p>
+                    <p><em>Confidence: {(result.confidence * 100).toFixed(2)}%</em></p>
                 </div>
             )}
         </div>

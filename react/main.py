@@ -24,7 +24,7 @@ def get_connection():
         host="localhost",
         user="root",
         password="Sunny2005@",
-        database="SkinCancer_ai"
+        database="skincare_ai"
     )
 
 class User(BaseModel):
