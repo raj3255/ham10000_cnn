@@ -16,7 +16,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# MySQL connection config
 def get_connection():
     return mysql.connector.connect(
         host="localhost",
@@ -25,16 +24,14 @@ def get_connection():
         database="skincare_ai"
     )
 
-# Pydantic model for request body
 class User(BaseModel):
     username: str
     email: str
-    password: str  # In production, use hashing
-#creating login model
+    password: str  
 class LoginModel(BaseModel):
     email:str
     password:str
-# Create users table if not exists
+
 def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
@@ -61,7 +58,7 @@ def create_tables():
 
 create_tables()
 
-model=tf.keras.models.load_model("ham1000_cnn_model_128improved.keras")
+model=tf.keras.models.load_model("skin_cancer_mobilenet.keras")
 # Register route
 @app.post("/api/register")
 def register(user: User):
@@ -81,8 +78,6 @@ def register(user: User):
     cursor.close()
     conn.close()
     return {"message": "User registered successfully"}
-
-# Login route
 @app.post("/api/login")
 def login(login: LoginModel):
     conn = get_connection()
@@ -106,12 +101,12 @@ async def upload_image(user_id: int = Form(...), file: UploadFile = File(...)):
     IMG_WIDTH = 128
     img = tf.image.decode_image(contents, channels=3)
     img = tf.image.resize(img, [IMG_HEIGHT, IMG_WIDTH])
-    img = img[None, ...] / 255.0  # Normalize
+    img = img[None, ...] / 255.0
 
     preds = model.predict(img)
     class_idx = int(np.argmax(preds, axis=1)[0])
     confidence = float(np.max(preds))
-    # You can map idx → class name here
+    # map idx → class name need to add
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
