@@ -22,7 +22,7 @@ export const labelInfo = {
   mel: {
     name: "Melanoma (MEL)",
     description: "Aggressive skin cancer from melanocytes; often resembles a mole with irregular features.",
-    advice: "⚠️ Very high risk—consult a dermatologist **immediately**."
+    advice: "Very high risk—consult a dermatologist **immediately**."
   },
   nv: {
     name: "Melanocytic Nevus (NV)",
